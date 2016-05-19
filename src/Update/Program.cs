@@ -431,7 +431,7 @@ namespace Squirrel.Update
             }
 
             var appName = getAppNameFromDirectory();
-            var defaultLocations = ShortcutLocation.StartMenu | ShortcutLocation.Desktop | ShortcutLocation.Startup;
+            var defaultLocations = ShortcutLocation.StartMenu | ShortcutLocation.Desktop;
             var locations = parseShortcutLocations(shortcutArgs);
 
             using (var mgr = new UpdateManager("", appName)) {
@@ -447,7 +447,7 @@ namespace Squirrel.Update
             }
 
             var appName = getAppNameFromDirectory();
-            var defaultLocations = ShortcutLocation.StartMenu | ShortcutLocation.Desktop | ShortcutLocation.Startup;
+            var defaultLocations = ShortcutLocation.StartMenu | ShortcutLocation.Desktop;
             var locations = parseShortcutLocations(shortcutArgs);
 
             using (var mgr = new UpdateManager("", appName)) {
