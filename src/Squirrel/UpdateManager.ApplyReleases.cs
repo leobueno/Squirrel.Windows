@@ -206,43 +206,47 @@ namespace Squirrel
 
                 foreach (var f in (ShortcutLocation[]) Enum.GetValues(typeof(ShortcutLocation))) {
                     if (!locations.HasFlag(f)) continue;
+                    try
+                    {
+                        var file = linkTargetForVersionInfo(f, zf, fileVerInfo);
+                        var fileExists = File.Exists(file);
 
-                    var file = linkTargetForVersionInfo(f, zf, fileVerInfo);
-                    var fileExists = File.Exists(file);
-
-                    // NB: If we've already installed the app, but the shortcut
-                    // is no longer there, we have to assume that the user didn't
-                    // want it there and explicitly deleted it, so we shouldn't
-                    // annoy them by recreating it.
-                    if (!fileExists && updateOnly) {
-                        this.Log().Warn("Wanted to update shortcut {0} but it appears user deleted it", file);
-                        continue;
-                    }
-
-                    this.Log().Info("Creating shortcut for {0} => {1}", exeName, file);
-
-                    ShellLink sl;
-                    this.ErrorIfThrows(() => Utility.Retry(() => {
-                        File.Delete(file);
-
-                        sl = new ShellLink {
-                            Target = updateExe,
-                            IconPath = icon ?? exePath,
-                            IconIndex = 0,
-                            WorkingDirectory = Path.GetDirectoryName(exePath),
-                            Description = zf.Description,
-                            Arguments = "--processStart \"" + exeName + "\"",
-                        };
-
-                        if (!String.IsNullOrWhiteSpace(programArguments)) {
-                            sl.Arguments += String.Format(" -a \"{0}\"", programArguments);
+                        // NB: If we've already installed the app, but the shortcut
+                        // is no longer there, we have to assume that the user didn't
+                        // want it there and explicitly deleted it, so we shouldn't
+                        // annoy them by recreating it.
+                        if (!fileExists && updateOnly) {
+                            this.Log().Warn("Wanted to update shortcut {0} but it appears user deleted it", file);
+                            continue;
                         }
 
-                        sl.SetAppUserModelId(String.Format("com.squirrel.{0}.{1}", zf.Id, exeName.Replace(".exe", "")));
+                        this.Log().Info("Creating shortcut for {0} => {1}", exeName, file);
 
-                        this.Log().Info("About to save shortcut: {0} (target {1}, workingDir {2}, args {3})", file, sl.Target, sl.WorkingDirectory, sl.Arguments);
-                        if (ModeDetector.InUnitTestRunner() == false) sl.Save(file);
-                    }, 4), "Can't write shortcut: " + file);
+                        ShellLink sl;
+                        this.ErrorIfThrows(() => Utility.Retry(() => {
+                            File.Delete(file);
+
+                            sl = new ShellLink {
+                                Target = updateExe,
+                                IconPath = icon ?? exePath,
+                                IconIndex = 0,
+                                WorkingDirectory = Path.GetDirectoryName(exePath),
+                                Description = zf.Description,
+                                Arguments = "--processStart \"" + exeName + "\"",
+                            };
+
+                            if (!String.IsNullOrWhiteSpace(programArguments)) {
+                                sl.Arguments += String.Format(" -a \"{0}\"", programArguments);
+                            }
+
+                            sl.SetAppUserModelId(String.Format("com.squirrel.{0}.{1}", zf.Id, exeName.Replace(".exe", "")));
+
+                            this.Log().Info("About to save shortcut: {0} (target {1}, workingDir {2}, args {3})", file, sl.Target, sl.WorkingDirectory, sl.Arguments);
+                            if (ModeDetector.InUnitTestRunner() == false) sl.Save(file);
+                        }, 4), "Can't write shortcut: " + file);
+                    } catch {
+                        //Ignore erro ao criar link
+                    }
                 }
 
                 fixPinnedExecutables(zf.Version);
@@ -425,7 +429,7 @@ namespace Squirrel
                     squirrelApps.ForEach(x => CreateShortcutsForExecutable(Path.GetFileName(x), ShortcutLocation.Desktop | ShortcutLocation.StartMenu, isInitialInstall == false, null, null));
                 }
 
-                if (!isInitialInstall || silentInstall) return;
+                if (!isInitialInstall) return;
 
                 var firstRunParam = isInitialInstall ? "--squirrel-firstrun" : "";
                 squirrelApps
