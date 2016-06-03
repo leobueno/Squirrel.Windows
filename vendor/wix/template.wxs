@@ -26,8 +26,6 @@
       <Component Id="RegistryEntries" Guid="{{IdAsGuid3}}">
         <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
           <RegistryValue Type="expandable" Name="{{Id}}MachineInstaller" Value="%ProgramFiles%\{{Title}} Installer\{{Id}}.exe --checkInstall" />
-        </RegistryKey>
-        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
           <RegistryValue Type="expandable" Name="{{Id}}" Value="%UserProfile%\AppData\Local\{{Id}}\{{Id}}\Update.exe" />
         </RegistryKey>
       </Component>
