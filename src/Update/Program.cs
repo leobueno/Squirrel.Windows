@@ -708,7 +708,7 @@ namespace Squirrel.Update
                 wxsTarget.Replace(".wxs", ".wixpdb"),
             };
 
-            //await Utility.ForEachAsync(toDelete, x => Utility.DeleteFileHarder(x));
+            await Utility.ForEachAsync(toDelete, x => Utility.DeleteFileHarder(x));
         }
 
         static string pathToWixTools()
