@@ -14,7 +14,7 @@
       <dependency id="Mono.Cecil" version="0.9.6.1" />
     </dependencies>
 
-    <id>squirrel.windows</id>
+    <id>custom.squirrel.windows</id>
     <title>Squirrel for Windows</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>An installation and update framework for Windows applications</description>
