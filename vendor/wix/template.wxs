@@ -26,7 +26,7 @@
       <Component Id="RegistryEntries" Guid="{{IdAsGuid3}}">
         <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
           <RegistryValue Type="expandable" Name="{{Id}}MachineInstaller" Value="%ProgramFiles%\{{Title}} Installer\{{Id}}.exe --checkInstall" />
-          <RegistryValue Type="expandable" Name="{{Id}}" Value="%UserProfile%\AppData\Local\{{Id}}\Update.exe" />
+          <RegistryValue Type="expandable" Name="{{Id}}" Value="%UserProfile%\AppData\Local\{{Id}}\Update.exe --processStart &quot;CLDesktop.exe&quot;" />
         </RegistryKey>
       </Component>
     </DirectoryRef>
