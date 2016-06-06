@@ -676,8 +676,8 @@ namespace Squirrel.Update
 
             var candleParams = String.Format("-nologo -ext WixNetFxExtension -out \"{0}\" \"{1}\"", wxsTarget.Replace(".wxs", ".wixobj"), wxsTarget);
             
-            Console.out.Write("Invoking candle");
-            Console.out.Write(candleParams);
+            Console.Out.Write("Invoking candle");
+            Console.Out.Write(candleParams);
             
             var processResult = await Utility.InvokeProcessAsync(
                 Path.Combine(pathToWix, "candle.exe"), candleParams, CancellationToken.None, setupExeDir);
